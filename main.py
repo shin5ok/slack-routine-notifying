@@ -7,6 +7,7 @@ SLACK_OAUTH_TOKEN = os.environ.get("SLACK_OAUTH_TOKEN")
 SLACK_CHANNEL_ID = os.environ.get("SLACK_CHANNEL_ID")
 OLDEST_DAYS = os.environ.get("OLDEST_DAYS", "60")
 EMAIL_DOMAIN = os.environ.get("EMAIL_DOMAIN", "google.com")
+TEMPLATE = os.environ.get("TEMPLATE")
 DEBUG = "DEBUG" in os.environ
 
 header_auth = {
@@ -111,7 +112,7 @@ def main(exporter_class):
     for e in u.values():
         data[e] = 0
 
-    exporter_class(data, info).send()
+    exporter_class(data, info, TEMPLATE).send()
 
 if __name__ == "__main__":
     if not DEBUG:

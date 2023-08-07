@@ -14,7 +14,7 @@ class BaseExporter(abc.ABC):
 
 class GoogleChatExporter(BaseExporter):
 
-    def __init__(self, data: dict, info: dict) -> None:
+    def __init__(self, data: dict, info: dict, template: str) -> None:
         from dotenv import load_dotenv
         import os
         from os.path import join, dirname
@@ -27,6 +27,7 @@ class GoogleChatExporter(BaseExporter):
         self.webhook = os.environ.get("WEBHOOK_URL")
         self.members_regexp = os.environ.get("MEMBERS")
         self.info = info
+        self.template = template
 
     def send(self) -> bool:
         import requests
@@ -64,9 +65,9 @@ class GoogleChatExporter(BaseExporter):
 
         gen += "\n"
 
-        gen += "\nなにか GEM Slack にポストお願いします！"
-        gen += "\nもちろんネタある方はどなたでも〜"
-        gen += "\n<users/all>"
+        if self.template:
+            with open(self.template) as f:
+                gen += f.read()
 
         gen += "\n\n" + actual
         return gen
