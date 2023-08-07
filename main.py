@@ -114,5 +114,6 @@ def main(exporter_class):
     exporter_class(data, info).send()
 
 if __name__ == "__main__":
-    import exporter
-    main(exporter.GoogleChatExporter)
+    if not DEBUG:
+        import exporter
+        main(exporter.GoogleChatExporter)
