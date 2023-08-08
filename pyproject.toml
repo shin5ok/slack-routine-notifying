@@ -8,6 +8,7 @@ authors = ["shin5ok <shin5ok@55mp.com>"]
 python = "^3.10"
 requests = "^2.31.0"
 python-dotenv = "^1.0.0"
+pytz = "^2023.3"
 
 [tool.poetry.dev-dependencies]
 

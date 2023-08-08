@@ -1,6 +1,7 @@
 import requests
 import os
 import json
+from typing import Any
 
 SLACK_BASE_URL = "https://slack.com/api"
 SLACK_OAUTH_TOKEN = os.environ.get("SLACK_OAUTH_TOKEN")
@@ -14,7 +15,7 @@ header_auth = {
     "Authorization": f"Bearer {str(SLACK_OAUTH_TOKEN)}",
 }
 
-def get_userlist() -> dict:
+def get_userlist() -> dict[str, dict]:
 
     payload = {
         "channel": SLACK_CHANNEL_ID,
@@ -45,7 +46,7 @@ def get_userlist() -> dict:
     
     return members
 
-def get_history(path: str = "/conversations.history") -> (dict, dict):
+def get_history(path: str = "/conversations.history") -> (dict[str, int], dict[str, Any]):
 
     from datetime import datetime, timedelta
 
@@ -74,7 +75,8 @@ def get_history(path: str = "/conversations.history") -> (dict, dict):
     if DEBUG:
         print(json.dumps(messages, indent=2))
 
-    r = {}
+    last_remark_by_user: dict = {}
+    r: dict = {}
     for entry in messages:
         if entry["type"] != "message":
             continue
@@ -93,8 +95,17 @@ def get_history(path: str = "/conversations.history") -> (dict, dict):
             else:
                 r[user] = 1
 
+            from datetime import datetime as dt
+            import datetime
+            if not user in last_remark_by_user:
+                ts = dt.fromtimestamp(float(entry['ts']), datetime.timezone(datetime.timedelta(hours=9)))
+                last_remark_by_user[user] = ts
+ 
     # {'UEVSMCELV': 20, 'UEV513F3L': 11, 'U05H8PVGYGL': 5, 'UETQ7B5FU': 9, 'UQ1N1V8R1': 8}
-    return r, {"OLDEST_DAYS": OLDEST_DAYS}
+    return r, {
+                "OLDEST_DAYS": OLDEST_DAYS,
+                "LAST_REMARK_BY_USER": last_remark_by_user,
+            }
 
 def main(exporter_class):
     hists, info = get_history()
@@ -106,11 +117,11 @@ def main(exporter_class):
             continue
 
         if not DEBUG:
-            data[u[k]] = v
+            data[u[k]] = [v, k]
             u.pop(k)
  
-    for e in u.values():
-        data[e] = 0
+    for k, v in u.items():
+        data[v] = [0, k]
 
     exporter_class(data, info, TEMPLATE).send()
 
