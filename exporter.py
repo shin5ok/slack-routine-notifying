@@ -40,6 +40,10 @@ class GoogleChatExporter(BaseExporter):
 
     def _gen_data(self) -> str:
         import re
+        from datetime import datetime as dt
+        import datetime
+
+        RECENT_DAYS: int = 7
         
         data = self.data
         limit = int(self.limit)
@@ -51,13 +55,22 @@ class GoogleChatExporter(BaseExporter):
         for k, v in data.items():
             if not regexp.match(k):
                 continue
-            actual += f"{k}さん {v}回\n"
+            actual += f"{k}さん {v[0]}回\n"
         actual += "```\n"
 
+        last_remark_by_user: dict = self.info.get("LAST_REMARK_BY_USER")
         gen = ""
-        for k, v in sorted(data.items(), key=lambda x: x[1]):
+        now = dt.now(datetime.timezone(datetime.timedelta(hours=9)))
+        for k, v in sorted(data.items(), key=lambda x: x[1][0]):
             if not regexp.match(k):
                 continue
+
+            # skip if user post something in RECENT_DAYS
+            if v[1] in last_remark_by_user:
+                ts = last_remark_by_user[v[1]]
+                delta = now - ts
+                if delta.days < RECENT_DAYS:
+                    continue
 
             if limit > 0:
                 gen += f"*{k}さん*, "
