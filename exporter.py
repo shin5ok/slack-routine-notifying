@@ -36,7 +36,7 @@ class GoogleChatExporter(BaseExporter):
         post_data = self._gen_data()
         response = requests.post(self.webhook, data=json.dumps({"text":post_data}), headers={"Content-Type": "application/json"})
         return response.content
-    
+
 
     def _gen_data(self) -> str:
         import re
@@ -44,12 +44,12 @@ class GoogleChatExporter(BaseExporter):
         import datetime
 
         RECENT_DAYS: int = 7
-        
+
         data = self.data
         limit = int(self.limit)
 
         regexp = re.compile(self.members_regexp, flags=re.IGNORECASE)
-        
+
         actual = f"直近{self.info['OLDEST_DAYS']}日の これまでの実績\n"
         actual += "```\n"
         for k, v in data.items():
@@ -65,7 +65,7 @@ class GoogleChatExporter(BaseExporter):
             if not regexp.match(k):
                 continue
 
-            # skip if user post something in RECENT_DAYS
+            # skip if user posted something in RECENT_DAYS
             if v[1] in last_remark_by_user:
                 ts = last_remark_by_user[v[1]]
                 delta = now - ts
@@ -75,6 +75,10 @@ class GoogleChatExporter(BaseExporter):
             if limit > 0:
                 gen += f"*{k}さん*, "
             limit -= 1
+
+        if gen == "":
+            gen += "*みなさま*\n"
+            gen += "（該当する人がいませんでした）"
 
         gen += "\n"
 

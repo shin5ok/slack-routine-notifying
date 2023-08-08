@@ -43,7 +43,7 @@ def get_userlist() -> dict[str, dict]:
                 members[v["id"]] = v["real_name"]
             if DEBUG:
                 print(json.dumps(v["real_name"], indent=2))
-    
+
     return members
 
 def get_history(path: str = "/conversations.history") -> (dict[str, int], dict[str, Any]):
