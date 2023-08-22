@@ -48,6 +48,8 @@ class GoogleChatExporter(BaseExporter):
         data = self.data
         limit = int(self.limit)
 
+        last_remark_by_user: dict = self.info.get("LAST_REMARK_BY_USER")
+
         regexp = re.compile(self.members_regexp, flags=re.IGNORECASE)
 
         actual = f"直近{self.info['OLDEST_DAYS']}日の これまでの実績\n"
@@ -55,10 +57,14 @@ class GoogleChatExporter(BaseExporter):
         for k, v in data.items():
             if not regexp.match(k):
                 continue
-            actual += f"{k}さん {v[0]}回\n"
+            actual += f"{k}さん {v[0]}回"
+            if v[1] in last_remark_by_user:
+                actual += f", 最終投稿日 {last_remark_by_user[v[1]].strftime('%Y/%m/%d')}"
+            else:
+                actual += ", 投稿なし"
+            actual +=  "\n"
         actual += "```\n"
 
-        last_remark_by_user: dict = self.info.get("LAST_REMARK_BY_USER")
         gen = ""
         now = dt.now(datetime.timezone(datetime.timedelta(hours=9)))
         for k, v in sorted(data.items(), key=lambda x: x[1][0]):
