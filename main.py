@@ -100,7 +100,7 @@ def get_history(path: str = "/conversations.history") -> (dict[str, int], dict[s
             if not user in last_remark_by_user:
                 ts = dt.fromtimestamp(float(entry['ts']), datetime.timezone(datetime.timedelta(hours=9)))
                 last_remark_by_user[user] = ts
- 
+
     # {'UEVSMCELV': 20, 'UEV513F3L': 11, 'U05H8PVGYGL': 5, 'UETQ7B5FU': 9, 'UQ1N1V8R1': 8}
     return r, {
                 "OLDEST_DAYS": OLDEST_DAYS,
@@ -119,7 +119,7 @@ def main(exporter_class):
         if not DEBUG:
             data[u[k]] = [v, k]
             u.pop(k)
- 
+
     for k, v in u.items():
         data[v] = [0, k]
 
