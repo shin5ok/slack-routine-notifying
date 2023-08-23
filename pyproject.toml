@@ -9,6 +9,8 @@ python = "^3.10"
 requests = "^2.31.0"
 python-dotenv = "^1.0.0"
 pytz = "^2023.3"
+langchain = "^0.0.271"
+google-cloud-aiplatform = "^1.31.0"
 
 [tool.poetry.dev-dependencies]
 
