@@ -97,18 +97,19 @@ class GoogleChatExporter(BaseExporter):
         if gen == "":
             gen += "*みなさま*\n"
             gen += "（該当する人がいませんでした）"
+        else:
+            if self.template:
+                with open(self.template) as f:
+                    gen += f.read()
+
+            t = Texttable()
+            t.set_deco(Texttable.HEADER)
+            t.set_cols_dtype(["t", "t", "t"])
+            rows[:0] = [["名前", "実績", "最終投稿日"]]
+            t.add_rows(rows)
+
+            gen += "\n\n" + "```\n" + t.draw() + "\n```\n"
 
         gen += "\n"
-
-        if self.template:
-            with open(self.template) as f:
-                gen += f.read()
-
-        t = Texttable()
-        t.set_deco(Texttable.HEADER)
-        t.set_cols_dtype(["t", "t", "t"])
-        rows[:0] = [["名前", "実績", "最終投稿日"]]
-        t.add_rows(rows)
-
-        gen += "\n\n" + "```\n" + t.draw() + "\n```\n"
         return gen
+
