@@ -1,5 +1,5 @@
-export SLACK_OAUTH_TOKEN=$(gcloud secrets versions access --secret=slack_oauth_token latest)
-export SLACK_CHANNEL_ID=$(gcloud secrets versions access --secret=slack_channel latest)
+export SLACK_OAUTH_TOKEN=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_oauth_token latest)
+export SLACK_CHANNEL_ID=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_channel latest)
 export TEMPLATE=template.txt
 
 export PYENV_ROOT="$HOME/.pyenv"
