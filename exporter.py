@@ -1,4 +1,5 @@
 import abc
+from typing import Union
 
 
 class BaseExporter(abc.ABC):
@@ -112,4 +113,84 @@ class GoogleChatExporter(BaseExporter):
 
         gen += "\n"
         return gen
+
+
+
+class GoogleChatExporterWithLLM(GoogleChatExporter):
+
+    def get_llm(self, message: str):
+        from langchain.llms import VertexAI
+        llm_template = "llm_template.txt"
+        with open(llm_template) as f:
+            data = f.read()
+        data = data.replace("##data##", message)
+
+        llm = VertexAI()
+        return llm(data)
+
+    def _gen_data(self) -> str:
+        import re
+        from datetime import datetime as dt
+        import datetime
+
+        RECENT_DAYS: int = 7
+
+        data = self.data
+        limit = int(self.limit)
+
+        last_remark_by_user: Union[dict, None] = self.info.get("LAST_REMARK_BY_USER")
+
+        regexp = re.compile(self.members_regexp, flags=re.IGNORECASE)
+
+        from texttable import Texttable
+
+        actual = f"直近{self.info['OLDEST_DAYS']}日の これまでの実績\n"
+        actual += "```\n"
+        rows = []
+
+        for k, v in data.items():
+            if not regexp.match(k):
+                continue
+            row = [f"{k}さん", f"{v[0]}回"]
+            actual += f"{k}さん {v[0]}回"
+            if v[1] in last_remark_by_user:
+                actual += f", 最終投稿日 {last_remark_by_user[v[1]].strftime('%Y/%m/%d')}"
+                row.append(last_remark_by_user[v[1]].strftime("%Y/%m/%d"))
+            else:
+                actual += ", 投稿なし"
+                row.append("投稿なし")
+            actual += "\n"
+            rows.append(row)
+        actual += "```\n"
+
+        gen = ""
+        now = dt.now(datetime.timezone(datetime.timedelta(hours=9)))
+        for k, v in sorted(data.items(), key=lambda x: x[1][0]):
+            if not regexp.match(k):
+                continue
+
+            # skip if user posted something in RECENT_DAYS
+            if v[1] in last_remark_by_user:
+                ts = last_remark_by_user[v[1]]
+                delta = now - ts
+                if delta.days < RECENT_DAYS:
+                    continue
+
+        if self.template:
+            with open(self.template) as f:
+                gen += f.read()
+
+        t = Texttable()
+        t.set_deco(Texttable.HEADER)
+        t.set_cols_dtype(["t", "t", "t"])
+        rows[:0] = [["名前", "実績", "最終投稿日"]]
+        t.add_rows(rows)
+
+        gen += "\n\n" + "```\n" + t.draw() + "\n```\n"
+
+        gen += "\n"
+
+        result = self.get_llm(gen)
+
+        return result
 
