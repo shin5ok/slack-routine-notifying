@@ -125,8 +125,10 @@ class GoogleChatExporterWithLLM(GoogleChatExporter):
             data = f.read()
         data = data.replace("##data##", message)
 
-        llm = VertexAI()
-        return llm(data)
+        print(data)
+
+        from usellm import LLM
+        return LLM().choose_candidates(data)
 
     def _gen_data(self) -> str:
         import re
