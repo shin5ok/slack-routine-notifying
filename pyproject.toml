@@ -12,6 +12,8 @@ pytz = "^2023.3"
 texttable = "^1.6.7"
 langchain = "^0.0.271"
 google-cloud-aiplatform = "^1.31.0"
+fastapi = "^0.103.1"
+uvicorn = "^0.23.2"
 
 [tool.poetry.dev-dependencies]
 
