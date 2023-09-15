@@ -1,7 +1,13 @@
 export PROJECT_ID=shingo-ar-test0729
+export TEMPLATE=template.txt
+
 export SLACK_OAUTH_TOKEN=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_oauth_token latest)
 export SLACK_CHANNEL_ID=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_channel latest)
-export TEMPLATE=template.txt
+if [ -z $SLACK_OAUTH_TOKEN ] || [ -z $SLACK_CHANNEL_ID ];
+then
+  echo "can not get Slack parameter"
+  exit 1
+fi
 
 echo "SLACK_OAUTH_TOKEN:" $SLACK_OAUTH_TOKEN
 echo "SLACK_CHANNEL_ID:" $SLACK_CHANNEL_ID
@@ -21,6 +27,6 @@ PORT=8800
 docker build -t $NAME .
 docker stop $NAME
 docker rm $NAME
-CMD="docker run -d --name $NAME --restart always -v $HOME/.config:/root/.config -p $PORT:8080 -e SLACK_OAUTH_TOKEN=$SLACK_OAUTH_TOKEN -e SLACK_CHANNEL_ID=$SLACK_CHANNEL_ID -e TEMPLATE=$TEMPLATE $NAME"
+CMD="docker run -d --name $NAME --restart always -p $PORT:8080 -e SLACK_OAUTH_TOKEN=$SLACK_OAUTH_TOKEN -e SLACK_CHANNEL_ID=$SLACK_CHANNEL_ID -e TEMPLATE=$TEMPLATE -v $(pwd):/var/config $NAME"
 echo $CMD
 $CMD
