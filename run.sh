@@ -1,4 +1,4 @@
-export PROJECT_ID=shingo-ar-test0729
+export PROJECT_ID=$PROJECT_ID
 export TEMPLATE=template.txt
 
 export SLACK_OAUTH_TOKEN=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_oauth_token latest)
