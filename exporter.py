@@ -146,24 +146,19 @@ class GoogleChatExporterWithLLM(GoogleChatExporter):
 
         from texttable import Texttable
 
-        actual = f"直近{self.info['OLDEST_DAYS']}日の これまでの実績\n"
-        actual += "```\n"
+        actual_title = f"直近{self.info['OLDEST_DAYS']}日の これまでの実績\n"
+
         rows = []
 
         for k, v in data.items():
             if not regexp.match(k):
                 continue
             row = [f"{k}さん", f"{v[0]}回"]
-            actual += f"{k}さん {v[0]}回"
             if v[1] in last_remark_by_user:
-                actual += f", 最終投稿日 {last_remark_by_user[v[1]].strftime('%Y/%m/%d')}"
                 row.append(last_remark_by_user[v[1]].strftime("%Y/%m/%d"))
             else:
-                actual += ", 投稿なし"
                 row.append("投稿なし")
-            actual += "\n"
             rows.append(row)
-        actual += "```\n"
 
         gen = ""
         now = dt.now(datetime.timezone(datetime.timedelta(hours=9)))
@@ -183,12 +178,19 @@ class GoogleChatExporterWithLLM(GoogleChatExporter):
                 gen += f.read()
 
         t = Texttable()
+
         t.set_deco(Texttable.HEADER)
         t.set_cols_dtype(["t", "t", "t"])
         rows[:0] = [["名前", "実績", "最終投稿日"]]
         t.add_rows(rows)
 
-        gen += "\n\n" + "```\n" + t.draw() + "\n```\n"
+        gen += f"""
+
+{actual_title}
+```
+{t.draw()}
+```
+"""
 
         gen += "\n"
 
