@@ -23,7 +23,7 @@ eval "$(pyenv init -)"
 
 
 NAME=slack-routing
-PORT=8800
+PORT=${SLACK_ROUTING_PORT:-8800}
 docker build -t $NAME .
 docker stop $NAME
 docker rm $NAME
