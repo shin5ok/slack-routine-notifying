@@ -123,7 +123,7 @@ def main(exporter_class):
     for k, v in u.items():
         data[v] = [0, k]
 
-    exporter_class(data, info, TEMPLATE).send()
+    exporter_class(data, info, "").send()
 
 if __name__ == "__main__":
     if not DEBUG:

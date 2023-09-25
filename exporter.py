@@ -21,7 +21,7 @@ class GoogleChatExporter(BaseExporter):
         import os
         from os.path import join, dirname
 
-        dotenv_path = join(dirname(__file__), ".env")
+        dotenv_path = "/config/.env"
         load_dotenv(dotenv_path)
 
         self.data = data
@@ -184,17 +184,18 @@ class GoogleChatExporterWithLLM(GoogleChatExporter):
         rows[:0] = [["名前", "実績", "最終投稿日"]]
         t.add_rows(rows)
 
-        gen += f"""
+        gen += "\n"
+        gen += t.draw()
 
+        result = self.get_llm(gen)
+
+        result += f"""
 {actual_title}
 ```
 {t.draw()}
 ```
+<users/all>
+
 """
-
-        gen += "\n"
-
-        result = self.get_llm(gen)
-
         return result
 
