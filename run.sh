@@ -27,6 +27,6 @@ PORT=${SLACK_ROUTING_PORT:-8800}
 docker build -t $NAME .
 docker stop $NAME
 docker rm $NAME
-CMD="docker run -d --name $NAME --restart always -p $PORT:8080 -e SLACK_OAUTH_TOKEN=$SLACK_OAUTH_TOKEN -e SLACK_CHANNEL_ID=$SLACK_CHANNEL_ID -e TEMPLATE=$TEMPLATE -v $(pwd):/var/config $NAME"
+CMD="docker run -d --name $NAME --restart always -p $PORT:8080 -e SLACK_OAUTH_TOKEN=$SLACK_OAUTH_TOKEN -e SLACK_CHANNEL_ID=$SLACK_CHANNEL_ID -e TEMPLATE=$TEMPLATE -v $(pwd)/config:/config $NAME"
 echo $CMD
 $CMD
