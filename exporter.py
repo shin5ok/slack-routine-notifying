@@ -21,7 +21,7 @@ class GoogleChatExporter(BaseExporter):
         import os
         from os.path import join, dirname
 
-        dotenv_path = "/config/.env"
+        dotenv_path = "./config/.env"
         load_dotenv(dotenv_path)
 
         self.data = data
