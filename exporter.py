@@ -34,8 +34,14 @@ class GoogleChatExporter(BaseExporter):
     def send(self) -> bool:
         import requests
         import json
+        import os
 
         post_data = self._gen_data()
+        if os.environ.get("DEBUG"):
+            import sys
+            print(post_data)
+            sys.exit(0)
+
         response = requests.post(
             self.webhook,
             data=json.dumps({"text": post_data}),

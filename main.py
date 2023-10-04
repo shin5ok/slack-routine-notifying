@@ -30,6 +30,14 @@ def get_userlist() -> dict[str, dict]:
         print(e)
     json_data = response.json()
 
+    if json_data["ok"] != True:
+        print(json.dumps(json_data, indent=2))
+        raise Exception("ok is not true")
+
+    if not "members" in json_data:
+        print(json.dumps(json_data, indent=2))
+        raise Exception("members not found")
+
     members = {}
     for v in json_data["members"]:
         if "profile" in v:
@@ -70,6 +78,11 @@ def get_history(path: str = "/conversations.history") -> (dict[str, int], dict[s
         print(e)
 
     json_data = response.json()
+
+    if json_data["ok"] != True:
+        print(json.dumps(json_data, indent=2))
+        raise Exception("ok is not true")
+
     messages = json_data['messages']
 
     if DEBUG:
