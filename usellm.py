@@ -18,8 +18,8 @@ class LLM:
     def __init__(self):
 
         parameters = {
-                "temperature": 0.3,
-                "max_output_tokens": 1024,
+                "temperature": 0.2,
+                # "max_output_tokens": 1024,
                 "top_p": 0.8,
                 "top_k": 40,
             }
