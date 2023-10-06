@@ -155,15 +155,19 @@ class GoogleChatExporterWithLLM(GoogleChatExporter):
         actual_title = f"直近{self.info['OLDEST_DAYS']}日の これまでの実績\n"
 
         rows = []
+        text = ""
 
         for k, v in data.items():
             if not regexp.match(k):
                 continue
             row = [f"{k}さん", f"{v[0]}回"]
             if v[1] in last_remark_by_user:
-                row.append(last_remark_by_user[v[1]].strftime("%Y/%m/%d"))
+                last_post_date = last_remark_by_user[v[1]].strftime("%Y/%m/%d")
             else:
-                row.append("投稿なし")
+                last_post_date = "投稿なし"
+            row.append(last_post_date)
+
+            text += f'{k}さん、投稿回数 {v[0]}回、最終投稿日 {last_post_date}' + "\n"
             rows.append(row)
 
         gen = ""
@@ -193,7 +197,7 @@ class GoogleChatExporterWithLLM(GoogleChatExporter):
         gen += "\n"
         gen += t.draw()
 
-        result = self.get_llm(gen)
+        result = self.get_llm(text)
 
         result += f"""
 {actual_title}
