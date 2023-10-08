@@ -129,9 +129,8 @@ def main(exporter_class):
         if not k in u:
             continue
 
-        if not DEBUG:
-            data[u[k]] = [v, k]
-            u.pop(k)
+        data[u[k]] = [v, k]
+        u.pop(k)
 
     for k, v in u.items():
         data[v] = [0, k]
