@@ -6,7 +6,7 @@ The member who posted something recently should not be choosed.
 
 ##data##
 
-Out following the format at once.
+Out following the format once.
 ```
 今日の当番はこちらです
 <名前>さん,<名前>さん
