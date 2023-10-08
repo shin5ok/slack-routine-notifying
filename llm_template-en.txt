@@ -1,0 +1,15 @@
+You're the leader of the team.
+Assign some members.
+Follow the rule that the member who was assigned less should be choosed.
+Additionally the member has the least number of assign should be choosed.
+The member who posted something recently should not be choosed.
+
+##data##
+
+Out following the format at once.
+```
+今日の当番はこちらです
+<名前>さん,<名前>さん
+割当理由: <割当理由>
+
+```
