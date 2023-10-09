@@ -16,7 +16,7 @@ class BaseExporter(abc.ABC):
 
 
 class GoogleChatExporter(BaseExporter):
-    def __init__(self, data: dict, info: dict, template: str) -> None:
+    def __init__(self, data: dict, info: dict, llm_template: str) -> None:
         from dotenv import load_dotenv
         import os
         from os.path import join, dirname
@@ -29,7 +29,8 @@ class GoogleChatExporter(BaseExporter):
         self.webhook = os.environ.get("WEBHOOK_URL")
         self.members_regexp = os.environ.get("MEMBERS")
         self.info = info
-        self.template = template
+        self.template = "template.txt"
+        self.llm_template = llm_template
 
     def send(self) -> bool:
         import requests
@@ -126,7 +127,7 @@ class GoogleChatExporterWithLLM(GoogleChatExporter):
 
     def get_llm(self, message: str):
         from langchain.llms import VertexAI
-        llm_template = "llm_template.txt"
+        llm_template = self.llm_template
         with open(llm_template) as f:
             data = f.read()
         data = data.replace("##data##", message)

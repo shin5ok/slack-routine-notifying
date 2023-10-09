@@ -9,6 +9,7 @@ SLACK_CHANNEL_ID = os.environ.get("SLACK_CHANNEL_ID")
 OLDEST_DAYS = os.environ.get("OLDEST_DAYS", "60")
 EMAIL_DOMAIN = os.environ.get("EMAIL_DOMAIN", "google.com")
 TEMPLATE = os.environ.get("TEMPLATE")
+LLM_TEMPLATE = os.environ.get("LLM_TEMPLATE")
 DEBUG = "DEBUG" in os.environ
 
 header_auth = {
@@ -135,7 +136,7 @@ def main(exporter_class):
     for k, v in u.items():
         data[v] = [0, k]
 
-    exporter_class(data, info, "").send()
+    exporter_class(data, info, LLM_TEMPLATE).send()
 
 if __name__ == "__main__":
     import exporter
