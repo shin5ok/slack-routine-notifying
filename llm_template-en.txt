@@ -3,6 +3,7 @@ Assign some members.
 Follow the rule that the member who was assigned less should be choosed.
 Additionally the member has the least number of assign should be choosed.
 The member who posted something recently should not be choosed.
+Think by step by step.
 
 ##data##
 

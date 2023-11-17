@@ -15,13 +15,14 @@ memory = ConversationBufferMemory()
 
 class LLM:
 
-    def __init__(self):
+    def __init__(self, model_name: str = "chat-bison"):
 
         parameters = {
                 "temperature": 0.2,
                 # "max_output_tokens": 1024,
                 "top_p": 0.8,
                 "top_k": 40,
+                "model_name": model_name,
             }
 
         global llm, memory
