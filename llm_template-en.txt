@@ -1,13 +1,18 @@
-You're the leader of the team.
-Assign some members.
-Follow the rule that the member who was assigned less should be choosed.
-Additionally the member has the least number of assign should be choosed.
-The member who posted something recently should not be choosed.
-Think by step by step.
+あなたはチームリーダーです
+二人のメンバーを選んで、アサインしてください
 
+次のルールに従って、選んでください
+1. これまでの実績で投稿回数が少ない、または少なめの人が選ばれるべきです
+2. これまでの実績を見て、最近投稿した人は選ばれるべきではありません
+3. 同じ人が、続けて選ばれてはいけません
+選ぶときには、ステップバイステップで考えてください
+
+考慮する実績のデータは以下です
+```
 ##data##
+```
 
-Out following the format once.
+次のフォーマットに従って出力してください
 ```
 今日の当番はこちらです
 <名前>さん,<名前>さん
