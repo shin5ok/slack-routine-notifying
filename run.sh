@@ -1,6 +1,6 @@
 export PROJECT_ID=$PROJECT_ID
 export TEMPLATE=template.txt
-export LLM_TEMPLATE=${LLM_TEMPLATE:-llm_template-en.txt}
+export LLM_TEMPLATE=${LLM_TEMPLATE:-llm_template.txt}
 
 export SLACK_OAUTH_TOKEN=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_oauth_token latest)
 export SLACK_CHANNEL_ID=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_channel latest)
