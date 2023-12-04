@@ -32,7 +32,7 @@ class GoogleChatExporter(BaseExporter):
         self.template = "template.txt"
         self.llm_template = llm_template
 
-    def send(self) -> bool:
+    def send(self, is_test: bool = False) -> bool:
         import requests
         import json
         import os
@@ -43,8 +43,12 @@ class GoogleChatExporter(BaseExporter):
             print(post_data)
             sys.exit(0)
 
+        webhook = self.webhook
+        if is_test:
+            webhook = os.environ.get("TEST_WEBHOOK_URL")
+
         response = requests.post(
-            self.webhook,
+            webhook,
             data=json.dumps({"text": post_data}),
             headers={"Content-Type": "application/json"},
         )

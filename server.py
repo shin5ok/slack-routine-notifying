@@ -3,10 +3,10 @@ from fastapi import FastAPI
 app = FastAPI()
 
 @app.get("/routing")
-def _routing():
+def _routing(is_test: bool = False):
     from main import main
     import exporter
-    main(exporter.GoogleChatExporterWithLLM)
+    main(exporter.GoogleChatExporterWithLLM, is_test)
     return {}
 
 if __name__ == "__main__":

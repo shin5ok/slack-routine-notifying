@@ -121,7 +121,7 @@ def get_history(path: str = "/conversations.history") -> (dict[str, int], dict[s
                 "LAST_REMARK_BY_USER": last_remark_by_user,
             }
 
-def main(exporter_class):
+def main(exporter_class, is_test=False):
     hists, info = get_history()
     u = get_userlist()
 
@@ -136,7 +136,7 @@ def main(exporter_class):
     for k, v in u.items():
         data[v] = [0, k]
 
-    exporter_class(data, info, LLM_TEMPLATE).send()
+    exporter_class(data, info, LLM_TEMPLATE).send(is_test)
 
 if __name__ == "__main__":
     import exporter
