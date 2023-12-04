@@ -38,10 +38,6 @@ class GoogleChatExporter(BaseExporter):
         import os
 
         post_data = self._gen_data()
-        if os.environ.get("DEBUG"):
-            import sys
-            print(post_data)
-            sys.exit(0)
 
         webhook = self.webhook
         if is_test:
