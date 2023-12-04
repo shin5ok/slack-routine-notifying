@@ -18,7 +18,7 @@ class LLM:
     def __init__(self, model_name: str = "chat-bison-32k"):
 
         parameters = {
-                "temperature": 0.2,
+                "temperature": 0.75,
                 # "max_output_tokens": 1024,
                 # "top_p": 0.8,
                 # "top_k": 40,

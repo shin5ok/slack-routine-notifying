@@ -16,7 +16,7 @@ class BaseExporter(abc.ABC):
 
 
 class GoogleChatExporter(BaseExporter):
-    def __init__(self, data: dict, info: dict, llm_template: str) -> None:
+    def __init__(self, data: dict, info: dict, llm_template: str, model_name: str = "") -> None:
         from dotenv import load_dotenv
         import os
         from os.path import join, dirname
@@ -30,6 +30,7 @@ class GoogleChatExporter(BaseExporter):
         self.members_regexp = os.environ.get("MEMBERS")
         self.info = info
         self.template = "template.txt"
+        self.model_name = model_name
         self.llm_template = llm_template
 
     def send(self, is_test: bool = False) -> bool:
@@ -135,7 +136,7 @@ class GoogleChatExporterWithLLM(GoogleChatExporter):
         print(data)
 
         from usellm import LLM
-        return LLM().choose_candidates(data)
+        return LLM(self.model_name).choose_candidates(data)
 
     def _gen_data(self) -> str:
         import re
