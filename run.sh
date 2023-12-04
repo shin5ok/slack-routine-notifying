@@ -1,4 +1,4 @@
-export PROJECT_ID=$PROJECT_ID
+export PROJECT_ID=$SLACK_ROUTING_PROJECT_ID
 export TEMPLATE=template.txt
 export LLM_TEMPLATE=${LLM_TEMPLATE:-llm_template.txt}
 
