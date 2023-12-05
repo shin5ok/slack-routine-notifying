@@ -4,7 +4,7 @@ export LLM_TEMPLATE=${LLM_TEMPLATE:-llm_template.txt}
 
 export PORT=${SLACK_ROUTING_PORT:-8800}
 export # MODEL_NAME=text-unicorn@001
-export MODEL_NAME=chat-bison-32k
+export MODEL_NAME=${MODEL_NAME:-chat-bison@002}
 
 export SLACK_OAUTH_TOKEN=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_oauth_token latest)
 export SLACK_CHANNEL_ID=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_channel latest)
