@@ -17,6 +17,20 @@ header_auth = {
     "Authorization": f"Bearer {str(SLACK_OAUTH_TOKEN)}",
 }
 
+def get_public_channels() -> list[str]:
+    slack_url = SLACK_BASE_URL + "/conversations.list"
+
+    try:
+        response = requests.get(slack_url, headers=header_auth, params={})
+        if not response.ok:
+            raise Exception(f"{slack_url} was {response.status_code}")
+    except Exception as e:
+        print(e)
+
+    json_data = response.json()
+    return [v['id'] for v in json_data['channels'] if not v['is_private']]
+
+
 def get_userlist() -> dict[str, dict]:
 
     payload = {
