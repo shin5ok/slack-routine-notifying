@@ -7,8 +7,8 @@ export # MODEL_NAME=text-unicorn@001
 export MODEL_NAME=${MODEL_NAME:-chat-bison@002}
 
 export SLACK_OAUTH_TOKEN=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_oauth_token latest)
-export SLACK_CHANNEL_ID=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_channel latest)
-if [ -z $SLACK_OAUTH_TOKEN ] || [ -z $SLACK_CHANNEL_ID ];
+export SLACK_DEFAULT_CHANNEL=$(gcloud --project=$PROJECT_ID secrets versions access --secret=slack_channel latest)
+if [ -z $SLACK_OAUTH_TOKEN ] || [ -z $SLACK_DEFAULT_CHANNEL ];
 then
   echo "can not get Slack parameter"
   exit 1
@@ -22,7 +22,7 @@ then
 fi
 
 echo "SLACK_OAUTH_TOKEN:" $SLACK_OAUTH_TOKEN
-echo "SLACK_CHANNEL_ID:" $SLACK_CHANNEL_ID
+echo "SLACK_DEFAULT_CHANNEL:" $SLACK_DEFAULT_CHANNEL
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH=$PATH:$HOME/.pyenv/shims
@@ -38,6 +38,6 @@ NAME=slack-routing
 docker build -t $NAME .
 docker stop $NAME
 docker rm $NAME
-CMD="docker run -d --name $NAME --restart always -p $PORT:8080 -e SLACK_OAUTH_TOKEN=$SLACK_OAUTH_TOKEN -e SLACK_CHANNEL_ID=$SLACK_CHANNEL_ID -e TEMPLATE=$TEMPLATE -e LLM_TEMPLATE=$LLM_TEMPLATE -e DEBUG=$DEBUG -e MODEL_NAME=$MODEL_NAME -v $(pwd)/config:/config $NAME"
+CMD="docker run -d --name $NAME --restart always -p $PORT:8080 -e SLACK_OAUTH_TOKEN=$SLACK_OAUTH_TOKEN -e SLACK_DEFAULT_CHANNEL=$SLACK_DEFAULT_CHANNEL -e TEMPLATE=$TEMPLATE -e LLM_TEMPLATE=$LLM_TEMPLATE -e DEBUG=$DEBUG -e MODEL_NAME=$MODEL_NAME -v $(pwd)/config:/config $NAME"
 echo $CMD
 $CMD
