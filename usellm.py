@@ -2,10 +2,8 @@ import langchain
 from pydantic import BaseModel
 
 from google.cloud import aiplatform
-from langchain.chat_models import ChatVertexAI
-from langchain.llms import VertexAI
+from langchain_google_vertexai import ChatVertexAI
 from langchain.prompts import FewShotPromptTemplate, PromptTemplate
-from langchain.schema import HumanMessage, SystemMessage
 from langchain.chat_models import ChatVertexAI
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
@@ -15,7 +13,7 @@ memory = ConversationBufferMemory()
 
 class LLM:
 
-    def __init__(self, model_name: str = "chat-bison-32k"):
+    def __init__(self, model_name: str = "gemini-pro"):
 
         parameters = {
                 "temperature": 0.75,
@@ -41,5 +39,3 @@ class LLM:
         ) 
         text = prompt.format()
         return self.llm.predict(input=text)
-        # return self.llm.predict(text)
-
