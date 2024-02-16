@@ -14,7 +14,6 @@ then
   exit 1
 fi
 
-
 if ! test -z $ENVONLY;
 then
   echo "env set has been done"
@@ -28,11 +27,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH=$PATH:$HOME/.pyenv/shims
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-
-# cli mode
-# cd ~/repos/slack-routine-notifying
-# poetry run python main.py
-
 
 NAME=slack-routing
 docker build -t $NAME .
